@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Архив заказов{% endblock %}
+{% set page='archive' %}
+
+{% block content %}
+<h2>Архив заказов</h2>
+
+<div class="orders-list">
+{% for o in orders %}
+<div class="order-card">
+
+    <div class="order-header">
+        <div class="order-left">
+            <div class="order-id">Заказ #{{ o.id }}</div>
+            <span class="status status-{{ o.status }}">
+                {{ statuses[o.status] }}
+            </span>
+        </div>
+        <div class="order-price">{{ "%.2f"|format(o.total_price) }} €</div>
+    </div>
+
+    <ul class="order-items">
+        {% for i in o.items %}
+            <li>{{ i.product_name }} — {{ i.quantity }}</li>
+        {% endfor %}
+    </ul>
+
+    <form method="post" action="/admin/orders/restore">
+        <input type="hidden" name="order_id" value="{{ o.id }}">
+        <button>Вернуть в работу</button>
+    </form>
+
+</div>
+{% endfor %}
+</div>
+{% endblock %}

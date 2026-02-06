@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать заказ</title>
+    <link rel="stylesheet" href="/admin/static/style.css">
+</head>
+<body>
+
+<div class="top-nav">
+    <div class="nav-left">
+        <a href="/admin/products">Товары</a>
+        <a href="/admin/orders">Заказы</a>
+        <a href="/admin/orders/create" class="active">Создать заказ</a>
+        <a href="/admin/orders/archive">Архив</a>
+    </div>
+
+    <div class="nav-center">
+        Панель управления <span>Panda VapeShop EU</span>
+    </div>
+
+    <div class="nav-right">
+        <button id="themeToggle">🌙</button>
+        <a href="/admin/logout" class="logout">Выйти</a>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Создать заказ</h2>
+
+    <div class="card">
+        <form method="post">
+            <div class="form-grid">
+                <input name="customer_name" placeholder="Имя клиента" required>
+                <input name="customer_username" placeholder="Telegram username">
+                <input name="customer_telegram_id" placeholder="Telegram ID">
+                <input name="customer_address" placeholder="Адрес" required>
+            </div>
+
+            <h3 style="margin-top:20px">Товары</h3>
+
+            {% for p in products %}
+            <div style="margin-bottom:10px">
+                {{ p.name }} ({{ p.quantity }} шт)
+                <input type="number" name="qty_{{ p.id }}" min="0" value="0">
+            </div>
+            {% endfor %}
+
+            <button style="margin-top:16px">Создать заказ</button>
+        </form>
+    </div>
+</div>
+
+<footer class="footer">prod by exotique</footer>
+
+<script>
+const toggle = document.getElementById("themeToggle");
+if (localStorage.theme === "dark") document.documentElement.dataset.theme = "dark";
+toggle.onclick = () => {
+    document.documentElement.dataset.theme =
+        document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    localStorage.theme = document.documentElement.dataset.theme;
+};
+</script>
+
+</body>
+</html>

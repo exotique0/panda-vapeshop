@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Заказы{% endblock %}
+{% set page='orders' %}
+
+{% block content %}
+<h2>Заказы</h2>
+
+<div class="orders-list">
+{% for o in orders %}
+<div class="order-card">
+
+    <div class="order-header">
+        <div class="order-left">
+            <div class="order-id">Заказ #{{ o.id }}</div>
+            <span class="status status-{{ o.status }}">
+                {{ statuses[o.status] }}
+            </span>
+        </div>
+        <div class="order-price">{{ "%.2f"|format(o.total_price) }} €</div>
+    </div>
+
+    <div class="order-meta">
+        👤 {{ o.customer_name }} &nbsp;
+        📍 {{ o.customer_address }} &nbsp;
+        🆔 TG ID: {{ o.customer_telegram_id or "—" }}
+    </div>
+
+    <ul class="order-items">
+        {% for i in o.items %}
+            <li>{{ i.product_name }} — {{ i.quantity }}</li>
+        {% endfor %}
+    </ul>
+
+    <div class="order-actions">
+        {% for k,v in statuses.items() %}
+        <form method="post" action="/admin/orders/status">
+            <input type="hidden" name="order_id" value="{{ o.id }}">
+            <input type="hidden" name="status" value="{{ k }}">
+            <button class="btn-status {{ k }}">{{ v }}</button>
+        </form>
+        {% endfor %}
+
+        <form method="post" action="/admin/orders/delete"
+              onsubmit="return confirm('Удалить заказ НАВСЕГДА?')">
+            <input type="hidden" name="order_id" value="{{ o.id }}">
+            <button class="btn-delete">Удалить</button>
+        </form>
+    </div>
+
+</div>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+﻿@router.post("/orders/status")
+def change_status(
+    order_id: int = Form(...),
+    status: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    order = db.get(Order, order_id)
+
+    # отмена  вернуть товар + архив
+    if status == "cancelled":
+        for item in order.items:
+            product = db.query(Product).filter_by(name=item.product_name).first()
+            if product:
+                product.quantity += item.quantity
+        order.archived = True
+
+    # выполнен  архив
+    if status == "completed":
+        order.archived = True
+
+    order.status = status
+    db.commit()
+
+    return RedirectResponse("/admin/orders", 302)

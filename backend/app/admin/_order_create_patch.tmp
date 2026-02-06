@@ -1,0 +1,27 @@
+﻿@router.post("/orders/create")
+def order_create(
+    product_id: int = Form(...),
+    quantity: int = Form(...),
+    db: Session = Depends(get_db),
+):
+    product = db.get(Product, product_id)
+
+    if not product or product.quantity < quantity:
+        return RedirectResponse("/admin/orders/create", 302)
+
+    # списываем товар
+    product.quantity -= quantity
+
+    order = Order(status="new", archived=False)
+    order.items.append(
+        OrderItem(
+            product_name=product.name,
+            quantity=quantity,
+            price=product.price,
+        )
+    )
+
+    db.add(order)
+    db.commit()
+
+    return RedirectResponse("/admin/orders", 302)

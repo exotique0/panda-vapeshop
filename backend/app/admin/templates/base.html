@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Panda VapeShop EU{% endblock %}</title>
+    <link rel="stylesheet" href="/admin/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<header class="top-nav">
+    <nav class="nav-left">
+        <a href="/admin/products" class="{% if page=='products' %}active{% endif %}">Товары</a>
+        <a href="/admin/orders" class="{% if page=='orders' %}active{% endif %}">Заказы</a>
+        <a href="/admin/orders/create" class="{% if page=='create' %}active{% endif %}">Создать заказ</a>
+        <a href="/admin/orders/archive" class="{% if page=='archive' %}active{% endif %}">Архив</a>
+    </nav>
+
+    <div class="nav-center">
+        Панель управления <b>Panda VapeShop EU</b>
+    </div>
+
+    <nav class="nav-right">
+        <button id="themeToggle" title="Тема">🌙</button>
+        <a href="/admin/logout" class="logout">Выйти</a>
+    </nav>
+</header>
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    prod by exotique
+</footer>
+
+<script>
+const btn = document.getElementById('themeToggle');
+btn.onclick = () => {
+    document.body.classList.toggle('dark');
+    localStorage.theme = document.body.classList.contains('dark') ? 'dark' : 'light';
+};
+if (localStorage.theme === 'dark') document.body.classList.add('dark');
+</script>
+
+</body>
+</html>
