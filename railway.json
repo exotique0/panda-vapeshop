@@ -1,7 +1,7 @@
 {
   "build": {
     "builder": "RAILPACK",
-    "buildCommand": "python3 -m pip install -r bot/requirements.txt"
+    "buildCommand": "python3 -m ensurepip && python3 -m pip install -r bot/requirements.txt"
   },
   "deploy": {
     "startCommand": "cd bot && python3 main.py"
